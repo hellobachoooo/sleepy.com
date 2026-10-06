@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sleepy.com | Workout, eat, schedule</title>
+<meta name="description" content="A simple workout, diet and daily schedule plan for first-year students.">
+<style>
+:root{
+  --night:#12163a; --dusk:#2e3585; --moon:#f3f1ff; --paper:#f7f8fd; --ink:#1b1e3d;
+  --muted:#5a5f86; --dawn:#ffb35c; --line:#dcdff2; --card:#ffffff; --link:#3d44b8;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0e1130; --ink:#e9e9fb; --muted:#a3a8d4; --line:#2a2f66; --card:#171b4a; --link:#ffb35c;}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;line-height:1.15;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--dawn);outline-offset:3px;border-radius:4px}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+.yt{font-weight:600;color:var(--link);white-space:nowrap}
+
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 15% 10%,#3a418f 0,var(--night) 58%);color:var(--moon);padding:70px 0 100px}
+.back{display:inline-block;color:#cfd1f5;text-decoration:none;font-size:.95rem;margin-bottom:40px}
+.hero h1{font-size:clamp(2.5rem,9vw,4.2rem);letter-spacing:-.02em;max-width:12ch}
+.hero p{font-size:1.2rem;max-width:32ch;margin:20px 0 30px;color:#cfd1f5}
+.btn{display:inline-block;background:var(--dawn);color:#2a1a00;font-weight:600;text-decoration:none;padding:14px 26px;border-radius:999px}
+.pulse{position:absolute;right:-30px;bottom:30px;width:230px;opacity:.5}
+.pulse path{stroke-dasharray:600;stroke-dashoffset:600;animation:draw 3s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+section{padding:72px 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-size:clamp(1.8rem,5.5vw,2.4rem);margin-bottom:14px}
+.lead{color:var(--muted);margin:0 0 28px}
+
+/* Week strip */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:28px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 2px;text-align:center;font-size:.8rem;line-height:1.3}
+.day b{display:block;font-size:.95rem}
+.day.w{background:var(--dusk);border-color:var(--dusk);color:#fff}
+.day.r{border-style:dashed}
+
+/* Tabs */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:18px}
+.tabs button{font:inherit;font-weight:600;white-space:nowrap;cursor:pointer;border:2px solid var(--line);background:var(--card);color:var(--ink);padding:10px 18px;border-radius:999px}
+.tabs button[aria-selected="true"]{background:var(--dusk);border-color:var(--dusk);color:#fff}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.panel[hidden]{display:none}
+.panel h3{font-size:1.4rem;margin-bottom:4px}
+.panel .sub{color:var(--muted);margin:0 0 14px}
+.ex{list-style:none;margin:0;padding:0}
+.ex li{display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.ex span{color:var(--muted);text-align:right;white-space:nowrap}
+.tip{background:rgba(255,179,92,.16);border-left:4px solid var(--dawn);border-radius:4px 12px 12px 4px;padding:14px 16px;margin-top:20px;font-size:.95rem}
+
+/* Diet */
+.meals{display:grid;gap:14px}
+.meal{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--dusk);border-radius:6px 14px 14px 6px;padding:18px 20px}
+.meal h3{font-size:1.15rem;margin-bottom:4px}
+.meal p{margin:0;color:var(--muted)}
+.plate{display:flex;height:46px;border-radius:999px;overflow:hidden;margin:6px 0 10px;font-size:.85rem;font-weight:600;color:#fff}
+.plate div{display:flex;align-items:center;justify-content:center;text-align:center}
+.plate .a{flex:50;background:#3f8f5a}.plate .b{flex:25;background:var(--dusk)}.plate .c{flex:25;background:#c7772b}
+.legend{color:var(--muted);font-size:.95rem;margin:0 0 28px}
+
+/* Schedule */
+.sched{list-style:none;margin:0;padding:0;border-left:3px solid var(--line);margin-left:6px}
+.sched li{position:relative;padding:0 0 22px 24px}
+.sched li::before{content:"";position:absolute;left:-9px;top:7px;width:15px;height:15px;border-radius:50%;background:var(--paper);border:3px solid var(--dusk)}
+.sched li.hl::before{background:var(--dawn);border-color:var(--dawn)}
+.sched time{font-weight:700;display:block}
+.sched span{color:var(--muted)}
+
+details{border-bottom:1px solid var(--line);padding:4px 0}
+summary{cursor:pointer;font-weight:600;padding:16px 28px 16px 0;list-style:none;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:4px;top:12px;font-size:1.5rem;color:var(--link);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:0 0 16px;color:var(--muted)}
+
+footer{background:var(--night);color:#b9bce8;padding:40px 0;text-align:center;font-size:.95rem}
+footer strong{color:var(--moon)}
+footer a{color:var(--dawn)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.pulse path{stroke-dashoffset:0}}
+@media (min-width:700px){.meals{grid-template-columns:1fr 1fr}.panel{padding:30px}.day{font-size:.9rem;padding:14px 4px}.pulse{width:360px;right:4%}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg class="pulse" viewBox="0 0 300 80" fill="none" aria-hidden="true"><path d="M0 40h70l15-30 25 60 20-45 15 15h155" stroke="#ffb35c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div class="wrap" style="position:relative">
+    <a class="back" href="index.html">← Back to the sleep guide</a>
+    <h1>Move, eat, rest, repeat</h1>
+    <p>A simple weekly plan of workouts, meals and timings for your first year.</p>
+    <a class="btn" href="#workout">See the workouts</a>
+  </div>
+</header>
+
+<main>
+<section id="workout">
+  <div class="wrap">
+    <h2>Your weekly workout</h2>
+    <p class="lead">Three short sessions plus walking is a realistic start. No gym needed.</p>
+
+    <div class="week" aria-label="Weekly overview">
+      <div class="day w"><b>Mon</b>Full body A</div>
+      <div class="day"><b>Tue</b>Walk</div>
+      <div class="day w"><b>Wed</b>Full body B</div>
+      <div class="day"><b>Thu</b>Walk</div>
+      <div class="day w"><b>Fri</b>Cardio + core</div>
+      <div class="day"><b>Sat</b>Play a sport</div>
+      <div class="day r"><b>Sun</b>Rest</div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Workout days">
+      <button role="tab" id="t0" aria-selected="true" aria-controls="p0">Full body A</button>
+      <button role="tab" id="t1" aria-selected="false" aria-controls="p1">Full body B</button>
+      <button role="tab" id="t2" aria-selected="false" aria-controls="p2">Cardio + core</button>
+      <button role="tab" id="t3" aria-selected="false" aria-controls="p3">Warm-up</button>
+    </div>
+
+    <div class="panel" id="p0" role="tabpanel" aria-labelledby="t0">
+      <h3>Full body A</h3><p class="sub">About 30 minutes. Rest 60 to 90 seconds between sets.</p>
+      <ul class="ex">
+        <li>Bodyweight squats<span>3 × 10–12</span></li>
+        <li>Push-ups (knees down if needed)<span>3 × 6–10</span></li>
+        <li>Backpack rows (bent over, books in a bag)<span>3 × 10</span></li>
+        <li>Glute bridges<span>3 × 12</span></li>
+        <li>Plank<span>3 × 20–30 sec</span></li>
+      </ul>
+      <div class="tip">Stop an exercise if you feel sharp pain. <a class="yt" href="https://www.youtube.com/results?search_query=beginner+bodyweight+workout+form" target="_blank" rel="noopener">▶ Watch: beginner form guide</a></div>
+    </div>
+
+    <div class="panel" id="p1" role="tabpanel" aria-labelledby="t1" hidden>
+      <h3>Full body B</h3><p class="sub">About 30 minutes. Same rest as day A.</p>
+      <ul class="ex">
+        <li>Reverse lunges<span>3 × 8 each leg</span></li>
+        <li>Incline push-ups (hands on a desk or bench)<span>3 × 8–12</span></li>
+        <li>Chair or bench dips<span>3 × 6–10</span></li>
+        <li>Standing calf raises<span>3 × 15</span></li>
+        <li>Side plank<span>2 × 15–20 sec each side</span></li>
+      </ul>
+      <div class="tip">When every set feels easy, add a rep or two before making it harder in other ways.</div>
+    </div>
+
+    <div class="panel" id="p2" role="tabpanel" aria-labelledby="t2" hidden>
+      <h3>Cardio + core</h3><p class="sub">About 30 minutes. You should be able to talk, but not sing.</p>
+      <ul class="ex">
+        <li>Brisk walk or easy jog<span>20 min</span></li>
+        <li>Dead bug<span>3 × 8 each side</span></li>
+        <li>Bird dog<span>3 × 8 each side</span></li>
+        <li>Mountain climbers (slow and controlled)<span>3 × 20 sec</span></li>
+      </ul>
+      <div class="tip">New to running? Alternate 1 minute of jogging with 2 minutes of walking. <a class="yt" href="https://www.youtube.com/results?search_query=beginner+core+workout+no+equipment" target="_blank" rel="noopener">▶ Watch: core moves</a></div>
+    </div>
+
+    <div class="panel" id="p3" role="tabpanel" aria-labelledby="t3" hidden>
+      <h3>Warm-up and cool-down</h3><p class="sub">Spend 5 minutes before and after every session.</p>
+      <ul class="ex">
+        <li>March on the spot or skip<span>1 min</span></li>
+        <li>Arm circles<span>10 each way</span></li>
+        <li>Hip circles and leg swings<span>10 each side</span></li>
+        <li>Cool-down: slow walk, then gentle stretches<span>3–5 min</span></li>
+      </ul>
+      <div class="tip">If you have a heart, joint or other health condition, check with a doctor before starting a new routine.</div>
+    </div>
+  </div>
+</section>
+
+<section id="diet">
+  <div class="wrap">
+    <h2>A simple eating plan</h2>
+    <p class="lead">No strict diet. Aim for regular meals built the same way each time.</p>
+    <div class="plate" role="img" aria-label="Plate split: half vegetables and fruit, a quarter protein, a quarter whole grains">
+      <div class="a">Vegetables</div><div class="b">Protein</div><div class="c">Grains</div>
+    </div>
+    <p class="legend">A rough guide for lunch and dinner: half vegetables, a quarter protein, a quarter whole grains.</p>
+
+    <div class="meals">
+      <div class="meal"><h3>Breakfast</h3><p>Eggs, or sprouts, or poha with peanuts. Add a fruit. Oats with milk or curd also work.</p></div>
+      <div class="meal"><h3>Lunch</h3><p>Roti or rice, dal or paneer or chicken, a vegetable dish and some salad.</p></div>
+      <div class="meal"><h3>Snack</h3><p>Roasted chana, fruit, nuts, curd or a boiled egg. Easy to carry between classes.</p></div>
+      <div class="meal"><h3>Dinner</h3><p>Similar to lunch but lighter. Try to finish eating a couple of hours before bed.</p></div>
+    </div>
+
+    <div class="tip" style="margin-top:22px">Drink water through the day. Go easy on sugary drinks and late-night snacks. Swap any food above for something that suits your diet, culture or allergies.</div>
+  </div>
+</section>
+
+<section id="schedule">
+  <div class="wrap">
+    <h2>A sample day</h2>
+    <p class="lead">Adjust the times around your lectures. The idea is to put sleep, meals and exercise on the calendar first.</p>
+    <ul class="sched">
+      <li><time>7:00 AM</time><span>Wake up, drink water, get some daylight</span></li>
+      <li><time>7:30 AM</time><span>Breakfast</span></li>
+      <li><time>9:00 AM – 1:00 PM</time><span>Lectures and study blocks</span></li>
+      <li><time>1:00 PM</time><span>Lunch and a short walk</span></li>
+      <li class="hl"><time>5:00 PM</time><span>Workout (30 minutes) on training days</span></li>
+      <li><time>7:30 PM</time><span>Dinner</span></li>
+      <li><time>8:30 PM – 10:00 PM</time><span>Revision or free time. No heavy study late</span></li>
+      <li class="hl"><time>10:30 PM</time><span>Phone away and wind down</span></li>
+      <li class="hl"><time>11:00 PM</time><span>Sleep. Use the <a class="yt" href="index.html#planner">bedtime planner</a> to match your wake-up time</span></li>
+    </ul>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>Common questions</h2>
+    <details><summary>Should I work out in the morning or evening?</summary><p>Whichever you will actually stick to. Very hard sessions close to bedtime can make it harder to fall asleep for some people.</p></details>
+    <details><summary>Do I need protein shakes?</summary><p>Most students can get enough protein from regular food such as eggs, dal, paneer, curd, chicken, fish or soy.</p></details>
+    <details><summary>What if I miss a session?</summary><p>Skip the guilt and do the next one on schedule. A plan you can repeat beats a perfect plan you drop.</p></details>
+    <details><summary>When should I talk to a professional?</summary><p>If you have a medical condition, feel dizzy or have chest pain when exercising, or want advice on weight or food, speak to a doctor or a registered dietitian.</p></details>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Made by <strong>sleepy.com</strong></p>
+    <p>General information only, not medical advice. <a href="index.html">Sleep guide</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('[role=tab]'));
+  function pick(i){
+    tabs.forEach(function(t,n){
+      var on=n===i;
+      t.setAttribute('aria-selected',on);
+      t.tabIndex=on?0:-1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden=!on;
+    });
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){pick(i)});
+    t.addEventListener('keydown',function(e){
+      var n=e.key==='ArrowRight'?i+1:e.key==='ArrowLeft'?i-1:null;
+      if(n===null)return;
+      n=(n+tabs.length)%tabs.length;pick(n);tabs[n].focus();
+    });
+  });
+  pick(0);
+})();
+</script>
+</body>
+</html>
