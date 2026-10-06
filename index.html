@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sleepy.com | Sleep well, study better</title>
+<meta name="description" content="A short guide to sleep for first-year students.">
+<style>
+:root{
+  --night:#12163a; --dusk:#2e3585; --moon:#f3f1ff; --paper:#f7f8fd; --ink:#1b1e3d;
+  --muted:#5a5f86; --dawn:#ffb35c; --line:#dcdff2; --card:#ffffff;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0e1130; --ink:#e9e9fb; --muted:#a3a8d4; --line:#2a2f66; --card:#171b4a;}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;line-height:1.15;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--dawn);outline-offset:3px;border-radius:4px}
+.wrap{max-width:720px;margin:0 auto;padding:0 22px}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 80% 15%,#3a418f 0,var(--night) 55%);color:var(--moon);padding:96px 0 110px}
+.hero h1{font-size:clamp(2.5rem,9vw,4.4rem);letter-spacing:-.02em;max-width:11ch}
+.hero p{font-size:1.2rem;max-width:30ch;margin:20px 0 32px;color:#cfd1f5}
+.btn{display:inline-block;background:var(--dawn);color:#2a1a00;font-weight:600;text-decoration:none;padding:14px 26px;border-radius:999px;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.moon{position:absolute;right:-50px;top:40px;width:190px;height:190px;border-radius:50%;background:var(--moon);box-shadow:0 0 80px 10px rgba(243,241,255,.25);opacity:.95}
+.moon::after{content:"";position:absolute;left:-46px;top:-18px;width:190px;height:190px;border-radius:50%;background:var(--night)}
+.stars{position:absolute;inset:0;pointer-events:none}
+.stars i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.7;animation:tw 4s ease-in-out infinite}
+@keyframes tw{50%{opacity:.15}}
+
+/* Sections */
+section{padding:72px 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-size:clamp(1.8rem,5.5vw,2.4rem);margin-bottom:14px}
+.lead{color:var(--muted);margin:0 0 28px}
+.facts{display:grid;gap:14px}
+.fact{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--dusk);border-radius:6px 14px 14px 6px;padding:18px 20px}
+.fact h3{font-size:1.15rem;margin-bottom:4px}
+.fact p{margin:0;color:var(--muted)}
+.habits{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.habits li{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+.habits .e{font-size:1.6rem;line-height:1.3}
+.habits b{display:block}
+.habits span{color:var(--muted)}
+
+/* Calculator */
+.calc{background:var(--night);color:var(--moon);border-radius:22px;padding:28px 22px}
+.calc h2{color:var(--moon)}
+.calc .lead{color:#b9bce8}
+.calc label{display:block;font-weight:600;margin-bottom:8px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.calc input{font:inherit;font-size:1.3rem;padding:12px 16px;border-radius:12px;border:2px solid #4a51a8;background:#1d2252;color:#fff;min-width:150px}
+.calc button{font:inherit;font-weight:600;border:0;cursor:pointer;background:var(--dawn);color:#2a1a00;padding:12px 24px;border-radius:12px}
+.results{display:grid;gap:10px;margin-top:24px}
+.res{display:flex;justify-content:space-between;align-items:baseline;gap:12px;background:#1d2252;border-radius:14px;padding:14px 18px;opacity:0;transform:translateY(8px);animation:in .35s forwards}
+.res:nth-child(2){animation-delay:.08s}.res:nth-child(3){animation-delay:.16s}
+@keyframes in{to{opacity:1;transform:none}}
+.res strong{font:600 1.7rem Georgia,serif;color:var(--dawn)}
+.res small{color:#b9bce8;text-align:right}
+.note{font-size:.9rem;color:#b9bce8;margin:18px 0 0}
+.err{color:#ffd0b0;margin-top:14px}
+
+/* FAQ */
+details{border-bottom:1px solid var(--line);padding:4px 0}
+summary{cursor:pointer;font-weight:600;padding:16px 28px 16px 0;list-style:none;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:4px;top:12px;font-size:1.5rem;color:var(--dusk);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:0 0 16px;color:var(--muted)}
+
+footer{background:var(--night);color:#b9bce8;padding:40px 0;text-align:center;font-size:.95rem}
+.yt{font-weight:600;color:#3d44b8;white-space:nowrap}
+.calc .yt{color:var(--dawn)}
+@media (prefers-color-scheme:dark){.yt{color:var(--dawn)}}
+footer strong{color:var(--moon)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.res{opacity:1;transform:none}}
+@media (min-width:700px){.moon{right:6%;width:260px;height:260px}.moon::after{width:260px;height:260px;left:-62px;top:-24px}.facts{grid-template-columns:1fr 1fr}.calc{padding:44px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="stars" aria-hidden="true">
+    <i style="left:8%;top:14%"></i><i style="left:30%;top:60%;animation-delay:1s"></i><i style="left:52%;top:20%;animation-delay:2s"></i>
+    <i style="left:70%;top:75%;animation-delay:.5s"></i><i style="left:90%;top:50%;animation-delay:1.5s"></i><i style="left:18%;top:85%;animation-delay:2.5s"></i>
+  </div>
+  <div class="moon" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative">
+    <h1>Sleep well, study better</h1>
+    <p>A first-year guide to getting enough rest when your schedule is anything but regular.</p>
+    <a class="btn" href="#planner">Plan your bedtime</a>
+  </div>
+</header>
+
+<main>
+<section id="why">
+  <div class="wrap">
+    <h2>Why sleep is part of studying</h2>
+    <p class="lead">Your brain does real work while you rest. Cutting sleep to fit in more study often backfires.</p>
+    <div class="facts">
+      <div class="fact"><h3>Memory</h3><p>Sleep helps your brain store what you learned during the day. Notes you read before bed tend to stick better than notes you read at 4 a.m.</p></div>
+      <div class="fact"><h3>Focus</h3><p>Even one short night makes it harder to pay attention and to stay patient in a long lecture.</p></div>
+      <div class="fact"><h3>Mood</h3><p>Tired people feel stress more sharply. Good sleep makes the first weeks away from home easier to handle.</p></div>
+      <div class="fact"><h3>How much you need</h3><p>Most adults need about 7 to 9 hours a night. Some 17 to 18 year olds may need a little more. <a class="yt" href="https://www.youtube.com/watch?v=5MuIMqhT8DM" target="_blank" rel="noopener">▶ Watch: Sleep is your superpower (TED)</a></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="habits">
+  <div class="wrap">
+    <h2>Habits that help</h2>
+    <p class="lead">Small, boring routines work better than any sleep hack.</p>
+    <ul class="habits">
+      <li><span class="e" aria-hidden="true">⏰</span><div><b>Keep a steady wake-up time</b><span>Try to stay within an hour or so of the same time, even on weekends.</span></div></li>
+      <li><span class="e" aria-hidden="true">📱</span><div><b>Put the phone away before bed</b><span>Screens keep your mind busy. Charge it across the room if you can.</span></div></li>
+      <li><span class="e" aria-hidden="true">☕</span><div><b>Watch caffeine late in the day</b><span>Tea, coffee and energy drinks can stay in your body for hours. Many people cut them off by the afternoon. <a class="yt" href="https://www.youtube.com/results?search_query=caffeine+and+sleep+explained" target="_blank" rel="noopener">▶ Watch: caffeine and sleep</a></span></div></li>
+      <li><span class="e" aria-hidden="true">🌤️</span><div><b>Get daylight in the morning</b><span>Light early in the day helps your body clock know when it is time to sleep later.</span></div></li>
+      <li><span class="e" aria-hidden="true">🛏️</span><div><b>Keep your bed for sleep</b><span>Study at a desk or in the library so your brain links the bed with rest.</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<section id="planner">
+  <div class="wrap">
+    <div class="calc">
+      <h2>Bedtime planner</h2>
+      <p class="lead">Pick the time you need to wake up. You will see bedtimes that line up with the end of a sleep cycle.</p>
+      <div class="row">
+        <div>
+          <label for="wake">I need to wake up at</label>
+          <input id="wake" type="time" value="07:00">
+        </div>
+        <div style="align-self:flex-end"><button id="go" type="button">Show bedtimes</button></div>
+      </div>
+      <div id="out" class="results" aria-live="polite"></div>
+      <p class="note">A sleep cycle lasts about 90 minutes and falling asleep takes about 15 minutes. Both vary from person to person, so treat these as a starting point. <a class="yt" href="https://www.youtube.com/results?search_query=power+nap+how+long+explained" target="_blank" rel="noopener">▶ Watch: how naps work</a></p>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>Common questions</h2>
+    <details><summary>Can I catch up on sleep at the weekend?</summary><p>A long lie-in can help a little, but it also shifts your body clock and makes Monday harder. Small, regular amounts of sleep work better.</p></details>
+    <details><summary>Is a nap a good idea?</summary><p>A short nap of about 20 minutes in the afternoon can help you feel sharper. Long naps late in the day may make it harder to fall asleep at night. <a class="yt" href="https://www.youtube.com/results?search_query=sleep+cycles+explained" target="_blank" rel="noopener">▶ Watch: sleep cycles explained</a></p></details>
+    <details><summary>What if I have an exam tomorrow?</summary><p>Review lightly, then go to bed at a reasonable time. Being rested usually helps more than one more hour of cramming.</p></details>
+    <details><summary>When should I talk to someone?</summary><p>If you often cannot sleep, feel exhausted during the day, or snore loudly and stop breathing at night, speak with a doctor or your college health service.</p></details>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Made by <strong>sleepy.com</strong></p>
+    <p>General information only, not medical advice.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var wake=document.getElementById('wake'), out=document.getElementById('out');
+  function fmt(m){
+    m=((m%1440)+1440)%1440;
+    var h=Math.floor(m/60), mm=m%60, ap=h>=12?'PM':'AM';
+    h=h%12||12;
+    return h+':'+(mm<10?'0':'')+mm+' '+ap;
+  }
+  function show(){
+    out.innerHTML='';
+    if(!wake.value){out.innerHTML='<p class="err">Choose a wake-up time first.</p>';return;}
+    var p=wake.value.split(':'), w=parseInt(p[0],10)*60+parseInt(p[1],10);
+    [[6,'9 hours','A full night'],[5,'7.5 hours','Good for most days'],[4,'6 hours','Only for a short night']].forEach(function(c){
+      var bed=w-c[0]*90-15;
+      var d=document.createElement('div');
+      d.className='res';
+      d.innerHTML='<strong>'+fmt(bed)+'</strong><small>'+c[2]+'<br>'+c[1]+' of sleep</small>';
+      out.appendChild(d);
+    });
+  }
+  document.getElementById('go').addEventListener('click',show);
+  wake.addEventListener('change',show);
+  show();
+})();
+</script>
+</body>
+</html>
